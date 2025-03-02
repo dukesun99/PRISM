@@ -48,8 +48,70 @@ pip install -r requirements.txt
 
 ### Data Preparation
 
-#### BigNews Dataset
-Please refer to the data preparation scripts for instructions on how to process the BigNews dataset for training.
+This section describes how to mine controversial topics and prepare training data for the PRISM model using the BigNews dataset.
+
+#### Controversial Topic and Bias Indicator Mining
+
+The first phase involves discovering politically controversial topics and their associated bias indicators from the news articles:
+
+1. **Initial Data Processing**
+   ```bash
+   python prepare_data.py
+   ```
+   - Loads and preprocesses articles from the BigNews dataset (left, center, right)
+   - Encodes article texts using a pre-trained generic text encoder
+   - Splits data into training (90%) and test (10%) sets
+
+2. **Topic Clustering and Filtering**
+   - Applies K-means clustering (3000 clusters) to group similar articles
+   - Computes political diversity score for each cluster using weighted variance
+   - Filters clusters based on:
+     * Political diversity (variance > 0.5)
+     * Minimum size (> 50 articles)
+     * Balanced representation of different political views
+
+3. **Bias Indicator Extraction**
+   - For each politically diverse cluster:
+     * Samples representative articles (up to 50)
+     * Uses GPT-4 to extract:
+       - Topic description (neutral summary)
+       - Left-leaning viewpoint indicators
+       - Right-leaning viewpoint indicators
+     * Validates extracted indicators for quality
+
+#### Political-Aware Cross-Encoder Training Data Generation
+
+The second phase prepares the training data for the cross-encoder model:
+
+1. **Positive Example Generation**
+   - For each article in a cluster:
+     * Pairs with its cluster's left indicator (label 1 if article is left-leaning, 0 otherwise)
+     * Pairs with its cluster's right indicator (label 1 if article is right-leaning, 0 otherwise)
+
+2. **Negative Example Generation**
+   - For each article:
+     * Randomly selects indicators from other clusters
+     * Creates article-indicator pairs with label 0
+   - Ensures balanced distribution of positive and negative examples
+
+#### Requirements
+
+- OpenAI API key (for GPT-4o-mini topic extraction)
+- Pre-trained generic text encoder (UAE-Large-V1)
+- scikit-learn with Intel Extension
+- At least 256GB RAM for processing large datasets
+- CUDA-capable GPU (recommended for faster encoding)
+
+#### Configuration
+
+Key parameters in `prepare_data.py`:
+- Topic clustering: 3000 initial clusters
+- Cluster filtering:
+  * Minimum size: 50 articles
+  * Political variance threshold: 0.5
+- Processing:
+  * Encoding batch size: 32
+  * Topic sampling: Up to 50 articles per cluster
 
 ## Training the Political-Aware Cross-Encoder
 

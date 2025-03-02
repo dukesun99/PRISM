@@ -186,7 +186,7 @@ def train_cross_encoder(
 
 def main():
     # Load data
-    with open("./data_for_train_bignews.json", "r") as f:
+    with open("processed_data/data_for_train_bignews.json", "r") as f:
         data_for_train = json.load(f)
             
     # Split data into train and validation sets

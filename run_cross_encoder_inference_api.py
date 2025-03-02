@@ -22,7 +22,7 @@ torch.cuda.set_device(args.gpu)
 app = Flask(__name__)
 
 # Load all the required data and models at startup
-with open("./checkpoints/bignews/parsed_topics.json", "r") as f:
+with open("processed_data/parsed_topics_bignews_normalized.json", "r") as f:
     parsed_topics = json.load(f)
 
 parsed_topics = {int(k): v for k, v in parsed_topics.items() if "left" in v and "right" in v and "topic" in v}
@@ -51,7 +51,7 @@ left_embeddings = angle_encode(left_indicators)
 right_embeddings = angle_encode(right_indicators)
 
 # Load the model
-model_path = "./checkpoints/bignews/checkpoint_step_1900000.pt"
+model_path = "checkpoints/bignews/checkpoint_step_1900000.pt"
 model = PoliticalBiasCrossEncoder(model_name="microsoft/deberta-v3-large")
 checkpoint = torch.load(model_path, map_location="cpu")
 # Extract just the model state dict and load it
