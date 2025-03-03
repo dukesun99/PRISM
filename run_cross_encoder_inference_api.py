@@ -51,7 +51,7 @@ left_embeddings = angle_encode(left_indicators)
 right_embeddings = angle_encode(right_indicators)
 
 # Load the model
-model_path = "checkpoints/bignews/checkpoint_step_1900000.pt"
+model_path = "checkpoints/bignews/model.pt"
 model = PoliticalBiasCrossEncoder(model_name="microsoft/deberta-v3-large")
 checkpoint = torch.load(model_path, map_location="cpu")
 # Extract just the model state dict and load it

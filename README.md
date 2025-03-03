@@ -209,7 +209,7 @@ The service deploys your trained political-aware cross-encoder model along with 
 
 Required files from training:
 - `checkpoints/bignews/parsed_topics.json`: Your mined controversial topics with left/right indicators
-- `checkpoints/bignews/checkpoint_step_1900000.pt`: Your trained PRISM model checkpoint
+- `checkpoints/bignews/model.pt`: Your trained PRISM model checkpoint
 
 ### Usage
 
