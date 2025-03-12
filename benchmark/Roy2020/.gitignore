@@ -1,0 +1,7 @@
+data/
+processed_data/
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+*.pkl 

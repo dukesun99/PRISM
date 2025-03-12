@@ -1,0 +1,9 @@
+data/
+processed_data/
+clef2023-checkthat-lab-main*/
+*.zip
+*.tar.gz
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
